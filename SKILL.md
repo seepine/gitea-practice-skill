@@ -7,11 +7,17 @@ metadata:
 
 # Gitea Practice Skill
 
-## gitea-mcp
+## 概述
 
-`gitea-mcp` 提供了常见的的 gitea 接口，支持通过 Model Context Protocol 与 Gitea 实例交互。
+基于**工单即任务**的理念，借助 `gitea-mcp` 与 Gitea 实例交互，通过标签管理工单状态，配合 Fork 和 Pull Request 机制完成工单开发。
 
-若需要了解更多关于 `gitea-mcp` 介绍，可查看 [references/gitea-mcp.md](references/gitea-mcp.md)。
+本 skill 涵盖两个核心场景：
+- **场景A**：认领工单 → 开发 → 创建 PR
+- **场景B**：评审被拒 → 修订 → 重新评审
+
+> 状态标签使用 `status/` 前缀，完整定义见下方章节。
+
+> 若需要了解更多关于 `gitea-mcp` 介绍，可查看 [references/gitea-mcp.md](references/gitea-mcp.md)。
 
 ## 工单状态管理
 
@@ -35,13 +41,15 @@ metadata:
 2. **标签前缀**：所有状态标签使用 `status/` 前缀，便于分类和管理
 3. **标签先行**：所有操作前应先更新工单标签状态
 
-## 场景A：处理工单流程
+## 最佳实践流程
+
+### 场景A: 处理工单流程
 
 获取指派给自己的工单，并通过派生、克隆、创建工单分支等系列流程进行开发，最后推送代码并创建 Pull Request 请求合并到主仓库，完成工单任务。
 
 具体流程和细节请查看 [references/issue-workflow.md](references/issue-workflow.md)。
 
-## 场景B：评审修订流程
+### 场景B: 评审修订流程
 
 创建 Pull Request 后会由专人评审，当评审失败时，需要根据评审意见进行修订。
 
