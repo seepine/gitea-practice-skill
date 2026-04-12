@@ -74,7 +74,22 @@
 
 ## 阶段二：更新工单状态
 
-### 2.1 移除工单标签 `status/reviewing`
+> 注意：工单流转步骤需要依次执行，并且不可缺漏，否则将会导致异常
+
+### 2.1 给工单添加评论 "I am working."
+
+使用 `issue__comment_create` 添加评论：
+
+```json
+{
+  "owner": "仓库所有者",
+  "repo": "仓库名称",
+  "index": 工单索引,
+  "body": "I am revising."
+}
+```
+
+### 2.2 移除工单标签 `status/reviewing`
 
 通过 `issue__remove_labels` 移除工单标签
 
@@ -87,7 +102,7 @@
 }
 ```
 
-### 2.2 添加工单标签 `status/revising`
+### 2.3 添加工单标签 `status/revising`
 
 通过 `issue__add_labels` 添加工单标签
 
