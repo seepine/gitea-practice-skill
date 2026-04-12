@@ -19,6 +19,8 @@ metadata:
 
 ### 状态标签定义
 
+> 若标签不存在则创建
+
 - `status/draft` - 草稿：工单创建中，内容尚未完善，不进入处理队列
 - `status/pending` - 等待中：工单已就绪，等待分配或认领
 - `status/working` - 进行中：已有人员正在处理该工单
@@ -38,3 +40,9 @@ metadata:
 获取指派给自己的工单，并通过派生、克隆、多分支等系列流程进行开发，最后推送代码并创建 Pull Request 请求合并到主仓库，完成工单任务。
 
 具体流程和细节请查看 [references/issue-workflow.md](references/issue-workflow.md)。
+
+## 场景B：评审修订流程
+
+创建 Pull Request 后会由专人评审，当评审失败时，需要根据评审意见进行修订。
+
+具体流程和细节请查看 [references/fix-review-workflow.md](references/fix-review-workflow.md)。

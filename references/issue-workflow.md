@@ -1,5 +1,7 @@
 # 处理工单流程
 
+> 注意：遵循一次只处理一个工单的原则执行
+
 基于工单即任务的理念，通过派生（Fork）和 Pull Request 机制完成工单任务开发。
 
 ## 流程概览
@@ -53,7 +55,7 @@
 
 ### 1.2 获取仓库信息与工单索引
 
-从工单中提取 `owner`、`repo` 和工单 `index` 编号。
+从第一个工单中提取 `owner`、`repo` 和工单 `index` 编号。
 
 ### 1.3 检查并 Fork 仓库（如未 Fork）
 
@@ -61,11 +63,13 @@
 
 ### 1.4 克隆自己 Fork 的仓库
 
-进入专属工作空间，例如在用户目录或者 openclaw/hermes 等专属目录下，创建文件夹 `workspace_gitea`
+进入工作空间，例如 openclaw/hermes 等一般会有自己专属的工作空间目录，若没有则一般使用用户目录，创建文件夹 `workspace_gitea`
+
+并克隆 Fork 的仓库，记住不要直接克隆，而是克隆的名称附上工单及编号，避免多个工单并行开发时出错
 
 ```bash
-cd <your_workspace_gitea>
-git clone https://gitea.example.com/${your_username}/${repo}.git
+cd <your_workspace_dir>/workspace_gitea
+git clone https://gitea.example.com/${your_username}/${repo}.git ${repo}_issue_${index}
 ```
 
 ### 1.5 添加上游仓库远程引用
