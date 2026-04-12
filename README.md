@@ -20,7 +20,7 @@
 执行以下命令，或者直接将仓库地址发给 `ClaudeCode`、`openclaw` 等 Agent。
 
 ```
-npx -y skill add https://github.com/seepine/gitea-skill
+npx -y skill add https://github.com/seepine/gitea-practice-skill
 ```
 
 ## 安装 gitea-mcp
