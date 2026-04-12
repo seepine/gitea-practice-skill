@@ -167,12 +167,7 @@ git push origin dev/issue_${index}
 
 ## 阶段四：提交修订并更新状态
 
-### 4.1 推送修订后的分支
-
-确保分支已推送到远程仓库。
-
-
-### 4.2 给工单添加评论说明修订内容
+### 4.1 给工单添加评论说明修订内容
 
 使用 `issue__comment_create` 添加评论，简要说明修订内容并请求重新评审：
 
@@ -185,7 +180,7 @@ git push origin dev/issue_${index}
 }
 ```
 
-### 4.3 移除工单标签 `status/revising`
+### 4.2 移除工单标签 `status/revising`
 
 通过 `issue__remove_labels` 移除工单标签
 
@@ -198,7 +193,7 @@ git push origin dev/issue_${index}
 }
 ```
 
-### 4.4 添加工单标签 `status/reviewing`
+### 4.3 添加工单标签 `status/reviewing`
 
 通过 `issue__add_labels` 添加工单标签
 
