@@ -2,7 +2,7 @@
 name: gitea-practice-skill
 description: 当需要通过 gitea-mcp 处理 Gitea 工单任务时使用，包括认领工单、创建分支开发、提交 Pull Request、或根据评审意见进行修订等场景
 metadata: 
-  version: 0.1.0
+  version: 0.1.1
 ---
 
 # Gitea Practice Skill
