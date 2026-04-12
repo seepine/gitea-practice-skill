@@ -213,18 +213,22 @@ git push origin dev/issue_${工单索引}
 }
 ```
 
-### 3.7 更新工单标签：移除 `status/pending`
+### 3.7 更新工单标签：移除 `status/working`
+
+使用 `issue__remove_labels` 移除标签：
 
 ```json
 {
   "owner": "仓库所有者",
   "repo": "仓库名称",
   "index": 工单索引,
-  "labels": ["status/pending"]
+  "labels": ["status/working"]
 }
 ```
 
-### 3.8 更新工单标签：移除 `status/reviewing`
+### 3.8 添加工单标签 `status/reviewing`
+
+使用 `issue__add_labels` 添加标签：
 
 ```json
 {
