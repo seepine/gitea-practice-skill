@@ -180,6 +180,10 @@ git commit -m '<type>: <subject>
 git push origin dev/issue_${index}
 ```
 
+### 3.6 请求评审人重新审核
+
+通过 `pull_request__add_reviewer` 重新请求所有拒绝的评审人审核
+
 ## 阶段四：提交修订并更新状态
 
 ### 4.1 给工单添加评论说明修订内容
