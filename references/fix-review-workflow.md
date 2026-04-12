@@ -70,7 +70,7 @@
 
 ### 1.3 确认 Issue 信息
 
-从 PR 信息中提取关联的 Issue 编号，PR body 中通常包含 `Fix #<issue_index>` 或类似引用。
+从 PR 信息中提取关联的 Issue 编号，PR body 中通常包含 `Fixed #<issue_index>` 或类似引用。
 
 ## 阶段二：更新工单状态
 
