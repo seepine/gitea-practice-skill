@@ -1,11 +1,11 @@
 ---
-name: gitea-skill
-description: 基于 gitea-mcp 的开发最佳实践，基于工单即任务的理念，指导如何高效完成工单任务，并通过 Pull Request 的方式合并代码
+name: gitea-practice-skill
+description: 当需要通过 gitea-mcp 处理 Gitea 工单任务时使用，包括认领工单、创建分支开发、提交 Pull Request、或根据评审意见进行修订等场景
 metadata: 
   version: 0.1.0
 ---
 
-# Gitea Skill
+# Gitea Practice Skill
 
 ## gitea-mcp
 
