@@ -200,18 +200,22 @@ git push origin dev/issue_${工单索引}
 
 ### 3.6 创建 Pull Request
 
-使用 `pull_request__create` 创建 PR：
+使用 `pull_request__create` 创建 PR，将派生的 `dev/issue_${工单索引}` 分支合并到主仓库的 `main` 分支
 
-```json
-{
-  "owner": "你的用户名",
-  "repo": "仓库名称",
-  "title": "<简短描述>",
-  "body": "## Summary\n- <变更点1>\n- <变更点2>\n\n## Related Issue\nFix #<工单索引>",
-  "head": "dev/issue_<工单索引>",
-  "base": "main"
-}
-```
+- 标题尽量简短但能描述清楚，参考如下
+  ```
+  <type>: <subject>
+  ```
+- 内容可填写详细修改点，且内容中必须包含 `Fixed #<工单索引>`，将此 PR 与修复的工单进行关联，参考如下
+  ```md
+  ### 总结
+  - <变更点1>
+  - <变更点2>
+
+  Fixed #<工单索引>
+  ```
+
+当 PR 创建完成之后，若有说明，则为 PR 添加评审人
 
 ### 3.7 更新工单标签：移除 `status/working`
 
