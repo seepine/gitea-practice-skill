@@ -2,7 +2,7 @@
 name: gitea-practice-skill
 description: 当需要通过 gitea-mcp 处理 Gitea 工单任务时使用，包括认领工单、创建分支开发、提交 Pull Request、或根据评审意见进行修订等场景
 metadata: 
-  version: 0.1.6
+  version: 0.1.7
   repository: https://github.com/seepine/gitea-practice-skill
 ---
 
@@ -41,6 +41,9 @@ metadata:
 1. **状态标签互斥**：一个工单同一时刻只能有一个状态标签
 2. **标签前缀**：所有状态标签使用 `status/` 前缀，便于分类和管理
 3. **标签先行**：所有操作前应先更新工单标签状态
+4. **最终态不可处理**：当工单标签处于最终状态时，不再进行任何处理，最终状态包括：
+    - `status/finished` - 已完成
+    - `status/aborted` - 已终止
 
 ## 最佳实践流程
 
