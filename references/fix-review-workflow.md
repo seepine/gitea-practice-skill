@@ -180,6 +180,8 @@ git merge upstream/main
 
 ### 3.5 提交并推送代码
 
+> 请注意，提交者信息（username和email）通过 `user__get_my_userinfo` 获取。
+
 ```bash
 git add .
 git commit -m '<type>: <subject>

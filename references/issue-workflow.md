@@ -185,7 +185,7 @@ git checkout -b dev/issue_${工单索引}
 
 ### 3.4 使用 Git 提交代码
 
-编码完成之后提交代码
+编码完成之后提交代码，请注意，提交者信息（username和email）通过 `user__get_my_userinfo` 获取。
 
 ```bash
 git add .
