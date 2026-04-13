@@ -45,7 +45,7 @@
 
 ### 1.1 获取当前用户创建的 Pull Request
 
-使用 `pull_request__list_my` 工具获取当前用户创建的所有 PR：
+使用 `pull_request__list_my` 工具获取当前用户创建的所有 PR，且状态开启中：
 
 ```json
 {
