@@ -213,7 +213,7 @@ git push origin dev/issue_${index}
 
 ### 4.2 请求评审人重新审核
 
-通过 `pull_request__add_reviewer` 重新请求所有拒绝的评审人审核
+通过 `pull_request__request_to_re_review` 请求拒绝的评审人重新审核
 
 ### 4.3 移除工单标签 `status/revising`
 
