@@ -2,7 +2,7 @@
 name: gitea-practice-skill
 description: 当需要通过 giteacli 处理 Gitea 工单任务时使用，包括认领工单、创建分支开发、提交 Pull Request、或根据评审意见进行修订等场景
 metadata: 
-  version: 0.1.8
+  version: 0.2.0
   repository: https://github.com/seepine/gitea-practice-skill
 ---
 
