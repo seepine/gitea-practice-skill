@@ -108,37 +108,30 @@ git remote add upstream https://gitea.example.com/${上游仓库owner}/${repo}.g
 git remote -v
 ```
 
+### 1.6 设置提交者信息
+
+通过命令获取 username 和 email
+
+```bash
+giteacli whoami
+```
+
+并设置
+
+```bash
+git config user.username <username>
+git config user.email <email>
+```
+
 ## 阶段二：工单流转
 
-> ⚠️ **【强制执行区】** 此阶段包含 **3 个严格按顺序执行的步骤**，不可中断、不可跳过、不可调换顺序！
->
-> 执行完每一个步骤后，**必须等待命令返回成功结果**，才能执行下一步。
+> ⚠️ **【强制执行区】** 此阶段包含 **3 个命令**，不可中断、不可跳过、不可调换顺序！
 
-### 2.1 给工单添加评论 "I am working."
-
-使用 `giteacli issue comment add` 添加评论：
+执行以下命令添加评论，并更新标签
 
 ```bash
 giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "I am working."
-```
-
-> 验证：确认评论添加成功后，记录工单当前状态已变更
-
-### 2.2 移除工单标签 `status/pending`
-
-使用 `giteacli issue del-labels` 移除标签：
-
-```bash
 giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/pending
-```
-
-> 验证：确认标签移除成功后，执行下一步
-
-### 2.3 添加工单标签 `status/working`
-
-使用 `giteacli issue add-labels` 添加标签：
-
-```bash
 giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/working
 ```
 
@@ -176,7 +169,7 @@ git checkout -b dev/issue_${工单索引}
 
 ### 3.4 使用 Git 提交代码
 
-编码完成之后提交代码，请注意，提交者信息（username和email）通过 `giteacli whoami` 获取。
+编码完成之后提交代码
 
 ```bash
 git add .
@@ -234,25 +227,12 @@ giteacli pr reviewer add --owner <owner> --repo <repo> --index <pr_index> --user
 
 ## 阶段四：提交 PR 并更新状态
 
-> ⚠️ **【强制执行区】** 此阶段包含 **2 个严格按顺序执行的标签更新步骤**，必须在 PR 创建完成后立即执行！
->
-> **执行顺序不可调换：必须先移除 `status/working`，再添加 `status/reviewing`**
+> ⚠️ **【强制执行区】** 此阶段包含 **2 个命令**，不可中断、不可跳过、不可调换顺序！
 
-### 4.1 更新工单标签：移除 `status/working`
-
-使用 `giteacli issue del-labels` 移除标签：
+执行以下命令更新工单标签
 
 ```bash
 giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/working
-```
-
-> 验证：确认标签移除成功后，执行下一步
-
-### 4.2 添加工单标签 `status/reviewing`
-
-使用 `giteacli issue add-labels` 添加标签：
-
-```bash
 giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
 ```
 

@@ -152,9 +152,22 @@ giteacli pr comments --owner <owner> --repo <repo> --index <index>
 
 根据评审意见逐条修改代码。
 
-### 3.5 提交并推送代码
+### 3.5 设置提交者信息
 
-> 请注意，提交者信息（username和email）通过 `giteacli whoami` 获取。
+通过命令获取 username 和 email
+
+```bash
+giteacli whoami
+```
+
+并设置
+
+```bash
+git config user.username <username>
+git config user.email <email>
+```
+
+### 3.6 提交并推送代码
 
 ```bash
 git add .
