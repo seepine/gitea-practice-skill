@@ -45,28 +45,22 @@
 
 ### 1.1 获取当前用户创建的 Pull Request
 
-使用 `pull_request__list_my` 工具获取当前用户创建的所有 PR，且状态开启中：
+使用 `giteacli pr search` 搜索当前用户创建的所有 PR，且状态开启中：
 
-```json
-{
-  "state": "open"
-}
+```bash
+giteacli pr search --state open --created true
 ```
 
 ### 1.2 筛选存在评审失败的 PR
 
-对于每个 PR，使用 `pull_request__list_reviews` 获取评审列表：
+对于每个 PR，使用 `giteacli pr reviews` 获取评审列表：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": PR编号
-}
+```bash
+giteacli pr reviews --owner <owner> --repo <repo> --index <index>
 ```
 
 筛选条件：
-- 存在评审意见状态为 `rejected` 的评审。
+- 存在评审意见状态为 `REQUEST_CHANGES` 的评审。
 - 对应工单标签必须为 `status/reviewing`
 - 找到一个 PR 符合条件的就往下执行
 
@@ -78,49 +72,34 @@
 
 > ⚠️ **【强制执行区】** 此阶段包含 **3 个严格按顺序执行的步骤**，不可中断、不可跳过、不可调换顺序！
 >
-> 执行完每一个步骤后，**必须等待工具返回成功结果**，才能执行下一步。
+> 执行完每一个步骤后，**必须等待命令返回成功结果**，才能执行下一步。
 
 ### 2.1 给工单添加评论 "I am revising."
 
-使用 `issue__comment_create` 添加评论：
+使用 `giteacli issue comment add` 添加评论：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "body": "I am revising."
-}
+```bash
+giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "I am revising."
 ```
 
 > 验证：确认评论添加成功后，执行下一步
 
 ### 2.2 移除工单标签 `status/reviewing`
 
-通过 `issue__remove_labels` 移除工单标签
+通过 `giteacli issue del-labels` 移除工单标签
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "labels": ["status/reviewing"]
-}
+```bash
+giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
 ```
 
 > 验证：确认标签移除成功后，执行下一步
 
 ### 2.3 添加工单标签 `status/revising`
 
-通过 `issue__add_labels` 添加工单标签
+通过 `giteacli issue add-labels` 添加工单标签
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "labels": ["status/revising"]
-}
+```bash
+giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/revising
 ```
 
 ## 阶段三：本地修订开发
@@ -165,22 +144,17 @@ git merge upstream/main
 
 ### 3.4 根据评审意见进行代码修订
 
-使用 `pull_request__get_review_comments` 获取评审的具体意见：
+使用 `giteacli pr comments` 获取评审的具体意见：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": PR编号,
-  "reviewId": 评审ID
-}
+```bash
+giteacli pr comments --owner <owner> --repo <repo> --index <index>
 ```
 
 根据评审意见逐条修改代码。
 
 ### 3.5 提交并推送代码
 
-> 请注意，提交者信息（username和email）通过 `user__get_my_userinfo` 获取。
+> 请注意，提交者信息（username和email）通过 `giteacli whoami` 获取。
 
 ```bash
 git add .
@@ -198,54 +172,43 @@ git push origin dev/issue_${index}
 
 ### 4.1 给工单添加评论说明修订内容
 
-使用 `issue__comment_create` 添加评论，简要说明修订内容并请求重新评审
+使用 `giteacli issue comment add` 添加评论，简要说明修订内容并请求重新评审
 
 其中 `<creatorUsername>` 请替换为工单的创建人
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "body": "### Revisions\n\n@<creatorUsername> 已完成评审意见的修订，请重新评审。\n\n修订内容：\n- <修订点1>\n- <修订点2>\n\n..."
-}
+```bash
+giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "### Revisions\n\n@<creatorUsername> 已完成评审意见的修订，请重新评审。\n\n修订内容：\n- <修订点1>\n- <修订点2>\n\n..."
 ```
 
 ### 4.2 请求评审人重新审核
 
-通过 `pull_request__request_to_re_review` 请求拒绝的评审人重新审核
+通过 `giteacli pr reviewer review` 请求拒绝的评审人重新审核
+
+```bash
+giteacli pr reviewer review --owner <owner> --repo <repo> --index <index> --username <username>
+```
 
 ### 4.3 移除工单标签 `status/revising`
 
-通过 `issue__remove_labels` 移除工单标签
+通过 `giteacli issue del-labels` 移除工单标签
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "labels": ["status/revising"]
-}
+```bash
+giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/revising
 ```
 
 > 验证：确认标签移除成功后，执行下一步
 
 ### 4.4 添加工单标签 `status/reviewing`
 
-通过 `issue__add_labels` 添加工单标签
+通过 `giteacli issue add-labels` 添加工单标签
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "labels": ["status/reviewing"]
-}
+```bash
+giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
 ```
 
 ## 注意事项
 
-1. **评审状态判断**：Gitea 评审状态包括 `approved`、`rejected`、`comment`、`request`，只有 `rejected` 需要修订
+1. **评审状态判断**：Gitea 评审状态包括 `approved`、`request_review`、`request_changes`，只有 `request_changes` 需要修订
 2. **保持分支同步**：在开始修订前，先从 upstream 拉取最新代码
 3. **逐条处理评审意见**：根据评审意见逐条修改(除非说的是同一个问题)，确保每条意见都得到响应
 4. **标签状态互斥**：同一工单同时只能有一个状态标签

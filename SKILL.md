@@ -1,6 +1,6 @@
 ---
 name: gitea-practice-skill
-description: 当需要通过 gitea-mcp 处理 Gitea 工单任务时使用，包括认领工单、创建分支开发、提交 Pull Request、或根据评审意见进行修订等场景
+description: 当需要通过 giteacli 处理 Gitea 工单任务时使用，包括认领工单、创建分支开发、提交 Pull Request、或根据评审意见进行修订等场景
 metadata: 
   version: 0.1.8
   repository: https://github.com/seepine/gitea-practice-skill
@@ -10,7 +10,7 @@ metadata:
 
 ## 概述
 
-基于**工单即任务**的理念，借助 `gitea-mcp` 与 Gitea 实例交互，通过标签管理工单状态，配合 Fork 和 Pull Request 机制完成工单开发。
+基于**工单即任务**的理念，借助 `giteacli` 与 Gitea 实例交互，通过标签管理工单状态，配合 Fork 和 Pull Request 机制完成工单开发。
 
 本 skill 涵盖两个核心场景：
 - **场景A**：认领工单 → 开发 → 创建 PR
@@ -18,7 +18,26 @@ metadata:
 
 > 状态标签使用 `status/` 前缀，完整定义见下方章节。
 
-> 若需要了解更多关于 `gitea-mcp` 介绍，可查看 [references/gitea-mcp.md](references/gitea-mcp.md)。
+### giteacli
+
+安装 giteacli
+
+```bash
+npm install -g @seepine/giteacli
+# 或
+pnpm add -g @seepine/giteacli
+```
+
+并进行认证，确保能获取到用户信息
+
+```bash
+# 登录到 Gitea 实例
+giteacli login --host <host> --token <token>
+# 查看当前登录用户
+giteacli whoami
+```
+
+> 若需要了解更多关于 `giteacli` 介绍，可查看 [references/giteacli.md](references/giteacli.md)。
 
 ## 工单管理
 

@@ -48,14 +48,10 @@
 
 ### 1.1 获取指派给自己的工单
 
-使用 `issue__search_list` 工具搜索指派给自己的工单：
+使用 `giteacli issue search` 搜索指派给自己的工单：
 
-```json
-{
-  "type": "assigned",
-  "state": "open",
-  "labels": ["status/pending"]
-}
+```bash
+giteacli issue search --state open --labels status/pending --assigned true --limit 1
 ```
 
 注意，工单必须：
@@ -69,7 +65,15 @@
 
 ### 1.3 检查并 Fork 仓库（如未 Fork）
 
-通过 `repo__list_my` 检查是否已 Fork 仓库，例如上游仓库为 `owner/repo`，则应该存在仓库 `<my-username>/repo`，如未 Fork 则使用 `repo__fork` 工具。
+通过 `giteacli repo list` 检查是否已 Fork 仓库，例如上游仓库为 `owner/repo`，则应该存在仓库 `<my-username>/repo`，如未 Fork 则使用 `giteacli repo fork` 工具。
+
+```bash
+# 检查是否已 Fork
+giteacli repo list
+
+# Fork 仓库
+giteacli repo fork --owner <owner> --repo <repo>
+```
 
 ### 1.4 克隆自己 Fork 的仓库
 
@@ -80,6 +84,16 @@
 ```bash
 cd <your_workspace_dir>/workspace_gitea
 git clone https://gitea.example.com/${your_username}/${repo}.git ${repo}_issue_${index}
+```
+
+最终目录应该类似如下
+
+```
+- your_workspace_dir
+  - workspace_gitea
+    - repo_issue_1
+    - repo_issue_2
+    - repo_issue_3
 ```
 
 ### 1.5 添加上游仓库远程引用
@@ -98,73 +112,50 @@ git remote -v
 
 > ⚠️ **【强制执行区】** 此阶段包含 **3 个严格按顺序执行的步骤**，不可中断、不可跳过、不可调换顺序！
 >
-> 执行完每一个步骤后，**必须等待工具返回成功结果**，才能执行下一步。
+> 执行完每一个步骤后，**必须等待命令返回成功结果**，才能执行下一步。
 
 ### 2.1 给工单添加评论 "I am working."
 
-使用 `issue__comment_create` 添加评论：
+使用 `giteacli issue comment add` 添加评论：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "body": "I am working."
-}
+```bash
+giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "I am working."
 ```
 
 > 验证：确认评论添加成功后，记录工单当前状态已变更
 
 ### 2.2 移除工单标签 `status/pending`
 
-使用 `issue__remove_labels` 移除标签：
+使用 `giteacli issue del-labels` 移除标签：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "labels": ["status/pending"]
-}
+```bash
+giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/pending
 ```
 
 > 验证：确认标签移除成功后，执行下一步
 
 ### 2.3 添加工单标签 `status/working`
 
-使用 `issue__add_labels` 添加标签：
+使用 `giteacli issue add-labels` 添加标签：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "labels": ["status/working"]
-}
+```bash
+giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/working
 ```
 
 ## 阶段三：工单处理
 
 ### 3.1 查看工单详细信息和所有评论
 
-使用 `issue__get_by_index` 获取工单详情：
+使用 `giteacli issue get` 获取工单详情：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引
-}
+```bash
+giteacli issue get --owner <owner> --repo <repo> --index <index>
 ```
 
-使用 `issue__comment_list` 获取所有评论：
+使用 `giteacli issue comment list` 获取所有评论：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引
-}
+```bash
+giteacli issue comment list --owner <owner> --repo <repo> --index <index>
 ```
 
 ### 3.2 详细分析工单需求
@@ -185,7 +176,7 @@ git checkout -b dev/issue_${工单索引}
 
 ### 3.4 使用 Git 提交代码
 
-编码完成之后提交代码，请注意，提交者信息（username和email）通过 `user__get_my_userinfo` 获取。
+编码完成之后提交代码，请注意，提交者信息（username和email）通过 `giteacli whoami` 获取。
 
 ```bash
 git add .
@@ -216,13 +207,13 @@ git push origin dev/issue_${工单索引}
 
 ### 3.6 创建 Pull Request
 
-使用 `pull_request__create` 创建 PR，将派生的 `dev/issue_${工单索引}` 分支合并到主仓库的 `main` 分支
+使用 `giteacli pr add` 创建 PR，将派生的 `dev/issue_${工单索引}` 分支合并到主仓库的 `main` 分支
 
 - 标题尽量简短但能描述清楚，参考如下
   ```
   <type>: <subject>
   ```
-- 内容可填写详细修改点，且内容中必须包含 `Fixed #<工单索引>`，将此 PR 与修复的工单进行关联，参考如下
+- 内容可填写详细修改点，且内容中包含 `Fixed #<工单索引>`，将此 PR 与修复的工单进行关联，参考如下
   ```md
   ### 总结
   - <变更点1>
@@ -231,7 +222,15 @@ git push origin dev/issue_${工单索引}
   Fixed #<工单索引>
   ```
 
+```bash
+giteacli pr add --owner <owner> --repo <repo> --title "<title>" --head <head_branch> --base main --body '### 总结\n\n- <变更点1>\n- <变更点2>\n\nFixed #<工单索引>'
+```
+
 当 PR 创建完成之后，若有说明，则为 PR 添加评审人
+
+```bash
+giteacli pr reviewer add --owner <owner> --repo <repo> --index <pr_index> --username <username>
+```
 
 ## 阶段四：提交 PR 并更新状态
 
@@ -241,30 +240,20 @@ git push origin dev/issue_${工单索引}
 
 ### 4.1 更新工单标签：移除 `status/working`
 
-使用 `issue__remove_labels` 移除标签：
+使用 `giteacli issue del-labels` 移除标签：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "labels": ["status/working"]
-}
+```bash
+giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/working
 ```
 
 > 验证：确认标签移除成功后，执行下一步
 
 ### 4.2 添加工单标签 `status/reviewing`
 
-使用 `issue__add_labels` 添加标签：
+使用 `giteacli issue add-labels` 添加标签：
 
-```json
-{
-  "owner": "仓库所有者",
-  "repo": "仓库名称",
-  "index": 工单索引,
-  "labels": ["status/reviewing"]
-}
+```bash
+giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
 ```
 
 ## 注意事项
