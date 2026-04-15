@@ -119,7 +119,7 @@ giteacli whoami
 并设置
 
 ```bash
-git config user.username <username>
+git config user.name <username>
 git config user.email <email>
 ```
 
