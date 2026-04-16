@@ -43,30 +43,21 @@
 
 ## 阶段一：发现需要修订的 PR
 
-### 1.1 获取当前用户创建的 Pull Request
+### 1.1 获取需要修订的 PR
 
-使用 `giteacli pr search` 搜索当前用户创建的所有 PR，且状态开启中：
-
-```bash
-giteacli pr search --state open --created true
-```
-
-### 1.2 筛选存在评审失败的 PR
-
-对于每个 PR，使用 `giteacli pr reviews` 获取评审列表：
+使用命令获取需要我修订的 PR，若命令没有获取到，则不需要往下执行
 
 ```bash
-giteacli pr reviews --owner <owner> --repo <repo> --index <index>
+giteacli pr tbd
 ```
 
-筛选条件：
-- 存在评审意见状态为 `REQUEST_CHANGES` 的评审。
-- 对应工单标签必须为 `status/reviewing`
-- 找到一个 PR 符合条件的就往下执行
+### 1.2 确认 Issue 信息
 
-### 1.3 确认 Issue 信息
+若找到需要修订的 PR，则从 PR 中提取关联的 Issue 编号，PR body 中通常包含 `Fixed #<issue_index>` 或类似引用。
 
-从 PR 信息中提取关联的 Issue 编号，PR body 中通常包含 `Fixed #<issue_index>` 或类似引用。
+```bash
+giteacli pr get --owner <owner> --repo <repo> --index <index>
+```
 
 ## 阶段二：更新工单状态
 
@@ -144,13 +135,18 @@ git merge upstream/main
 
 ### 3.4 根据评审意见进行代码修订
 
-使用 `giteacli pr comments` 获取评审的具体意见：
+使用 `giteacli pr reviews` 获取评审的具体意见，根据评审意见逐条修改代码
 
 ```bash
-giteacli pr comments --owner <owner> --repo <repo> --index <index>
+giteacli pr reviews --owner <owner> --repo <repo> --index <index>
 ```
 
-根据评审意见逐条修改代码。
+有必要的话还可以使用评论相关命令查看历史评论记录
+
+```bash
+giteacli pr comments --owner <owner> --repo <repo> --index <prIndex>
+giteacli issue comment list --owner <owner> --repo <repo> --index <issueIndex>
+```
 
 ### 3.5 设置提交者信息
 
@@ -201,27 +197,17 @@ giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body 
 giteacli pr reviewer review --owner <owner> --repo <repo> --index <index> --username <username>
 ```
 
-### 4.3 移除工单标签 `status/revising`
+### 4.3 更新工单标签
 
-通过 `giteacli issue del-labels` 移除工单标签
+使用以下命令移除 `status/revising` 标签，并添加 `status/reviewing` 标签
 
 ```bash
 giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/revising
-```
-
-> 验证：确认标签移除成功后，执行下一步
-
-### 4.4 添加工单标签 `status/reviewing`
-
-通过 `giteacli issue add-labels` 添加工单标签
-
-```bash
 giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
 ```
 
 ## 注意事项
 
-1. **评审状态判断**：Gitea 评审状态包括 `approved`、`request_review`、`request_changes`，只有 `request_changes` 需要修订
-2. **保持分支同步**：在开始修订前，先从 upstream 拉取最新代码
-3. **逐条处理评审意见**：根据评审意见逐条修改(除非说的是同一个问题)，确保每条意见都得到响应
-4. **标签状态互斥**：同一工单同时只能有一个状态标签
+1. **保持分支同步**：在开始修订前，先从 upstream 拉取最新代码
+2. **逐条处理评审意见**：根据评审意见逐条修改(除非说的是同一个问题)，确保每条意见都得到响应
+3. **标签状态互斥**：同一工单同时只能有一个状态标签
