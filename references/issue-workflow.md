@@ -48,10 +48,10 @@
 
 ### 1.1 获取指派给自己的工单
 
-使用 `giteacli issue search` 搜索指派给自己的工单：
+使用 `giteacli issue search` 搜索指派给自己的工单第一个：
 
 ```bash
-giteacli issue search --state open --labels status/pending --assigned true --limit 1
+giteacli issue search --state open --labels status/pending --assigned true --limit 20 | jq '.matchItems.[0]'
 ```
 
 注意，工单必须：
