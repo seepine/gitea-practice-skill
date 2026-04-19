@@ -61,36 +61,18 @@ giteacli pr get --owner <owner> --repo <repo> --index <index>
 
 ## 阶段二：更新工单状态
 
-> ⚠️ **【强制执行区】** 此阶段包含 **3 个严格按顺序执行的步骤**，不可中断、不可跳过、不可调换顺序！
->
-> 执行完每一个步骤后，**必须等待命令返回成功结果**，才能执行下一步。
+> ⚠️ **【强制执行区】** 此阶段包含 **4 个严格按顺序执行的步骤**，不可中断、不可跳过、不可调换顺序！
 
-### 2.1 给工单添加评论 "I am revising."
-
-使用 `giteacli issue comment add` 添加评论：
+执行以下命令，记得将其中 `<owner>`/`<repo>` 等变量替换成实际的
+- 给工单添加评论、更新标签
+- 修改 PR 的标题，添加 `WIP: ` 前缀
 
 ```bash
 giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "I am revising."
-```
-
-> 验证：确认评论添加成功后，执行下一步
-
-### 2.2 移除工单标签 `status/reviewing`
-
-通过 `giteacli issue del-labels` 移除工单标签
-
-```bash
 giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
-```
-
-> 验证：确认标签移除成功后，执行下一步
-
-### 2.3 添加工单标签 `status/revising`
-
-通过 `giteacli issue add-labels` 添加工单标签
-
-```bash
 giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/revising
+
+giteacli pr edit --owner agenteam --repo hermes-agent --index 11 --title "WIP: <originalTitle>"
 ```
 
 ## 阶段三：本地修订开发
@@ -179,31 +161,20 @@ git push origin dev/issue_${index}
 >
 > **执行顺序不可调换：必须先给工单添加评论，再请求评审人重新审核，最后更新标签状态**
 
-### 4.1 给工单添加评论说明修订内容
 
-使用 `giteacli issue comment add` 添加评论，简要说明修订内容并请求重新评审
+> ⚠️ **【强制执行区】** 此阶段包含 **4 个严格按顺序执行的步骤**，不可中断、不可跳过、不可调换顺序！
 
-其中 `<creatorUsername>` 请替换为工单的创建人
+执行以下命令，记得将其中 `<owner>`/`<repo>` 等变量替换成实际的
+- 给工单添加评论、更新标签
+- 重新请求审查人审批，并修改 PR 的标题去掉 `WIP: ` 前缀
 
 ```bash
 giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "### Revisions\n\n@<creatorUsername> 已完成评审意见的修订，请重新评审。\n\n修订内容：\n- <修订点1>\n- <修订点2>\n\n..."
-```
-
-### 4.2 请求评审人重新审核
-
-通过 `giteacli pr reviewer review` 请求拒绝的评审人重新审核
-
-```bash
-giteacli pr reviewer review --owner <owner> --repo <repo> --index <index> --username <username>
-```
-
-### 4.3 更新工单标签
-
-使用以下命令移除 `status/revising` 标签，并添加 `status/reviewing` 标签
-
-```bash
 giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/revising
 giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
+
+giteacli pr edit --owner agenteam --repo hermes-agent --index 11 --title "<originalTitle>"
+giteacli pr reviewer review --owner <owner> --repo <repo> --index <index> --username <username>
 ```
 
 ## 注意事项
