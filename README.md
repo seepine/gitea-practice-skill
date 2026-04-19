@@ -20,28 +20,31 @@
 执行以下命令，或者直接将仓库地址发给 `ClaudeCode`、`openclaw` 等 Agent。
 
 ```
-npx -y skill add https://github.com/seepine/gitea-practice-skill
+npx -y skills add https://github.com/seepine/gitea-practice-skill
 ```
 
-## 安装 gitea-mcp
+## 安装 giteacli
 
-其中环境变量替换成你自己的， `GITEA_ACCESS_TOKEN` 可在 gitea 的【设置-应用】中生成，注意勾选所有读写权限。
+其中 `host` 和 `token` 替换成你自己的， `token` 可在 gitea 的【设置-应用】中生成，注意勾选所有读写权限。
 
 建议为 AI 单独创建一个 gitea 账号，通过 `fork` 和 `pull request` 的最佳实践进行工作。
 
-```json
-{
-  "mcpServers": {
-    "gitea": {
-      "command": "npx",
-      "args": ["gitea-mcp"],
-      "env": {
-        "GITEA_HOST": "https://gitea.example.com",
-        "GITEA_ACCESS_TOKEN": "your-token"
-      }
-    }
-  }
-}
+### 安装
+
+```bash
+npm install -g @seepine/giteacli
+# 或
+pnpm add -g @seepine/giteacli
+```
+
+### 认证配置
+
+```bash
+# 登录到 Gitea 实例
+giteacli login --host <host> --token <token>
+
+# 查看当前登录用户
+giteacli whoami
 ```
 
 ## 使用示例
