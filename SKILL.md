@@ -37,7 +37,7 @@ giteacli login --host <host> --token <token>
 giteacli whoami
 ```
 
-> 若需要了解更多关于 `giteacli` 介绍，可查看 [references/giteacli.md](references/giteacli.md)。
+> 若需要了解更多关于 `giteacli` 介绍，可查看 [references/giteacli.md](./references/giteacli.md)。
 
 ## 工单管理
 
@@ -75,10 +75,10 @@ giteacli whoami
 
 获取指派给自己的工单，并通过派生、克隆、创建工单分支等系列流程进行开发，最后推送代码并创建 Pull Request 请求合并到主仓库，完成工单任务。
 
-具体流程和细节请查看 [references/issue-workflow.md](references/issue-workflow.md)。
+具体流程和细节请查看 [references/issue-workflow.md](./references/issue-workflow.md)。
 
 ### 场景B: 评审修订流程
 
 创建 Pull Request 后会由专人评审，当评审失败时，需要根据评审意见进行修订。
 
-具体流程和细节请查看 [references/fix-review-workflow.md](references/fix-review-workflow.md)。
+具体流程和细节请查看 [references/fix-review-workflow.md](./references/fix-review-workflow.md)。
