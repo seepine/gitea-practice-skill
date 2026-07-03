@@ -9,7 +9,7 @@
 │                    阶段一：发现需要修订的 PR                       │
 ├─────────────────────────────────────────────────────────────────┤
 │ 1. 获取当前用户创建的 Pull Request                                 │
-│ 2. 筛选出存在评审意见为 "rejected" 状态的 PR                        │
+│ 2. 筛选出存在评审意见为 `REQUEST_CHANGES` 状态的 PR                  │
 │ 3. 确认对应的 Issue 编号和仓库信息                                  │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
@@ -56,23 +56,23 @@ giteacli pr tbd
 若找到需要修订的 PR，则从 PR 中提取关联的 Issue 编号，PR body 中通常包含 `Fixed #<issue_index>` 或类似引用。
 
 ```bash
-giteacli pr get --owner <owner> --repo <repo> --index <index>
+giteacli pr get --repo <owner/repo> --index <prIndex>
 ```
 
 ## 阶段二：更新工单状态
 
 > ⚠️ **【强制执行区】** 此阶段包含 **4 个严格按顺序执行的步骤**，不可中断、不可跳过、不可调换顺序！
 
-执行以下命令，记得将其中 `<owner>`/`<repo>` 等变量替换成实际的
+执行以下命令，记得将其中 `<owner/repo>` 等变量替换成实际的
 - 给工单添加评论、更新标签
 - 修改 PR 的标题，添加 `WIP: ` 前缀
 
 ```bash
-giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "I am revising."
-giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
-giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/revising
+giteacli issue comment add --repo <owner/repo> --index <index> --body "I am revising."
+giteacli issue del-labels --repo <owner/repo> --index <index> --labels status/reviewing
+giteacli issue add-labels --repo <owner/repo> --index <index> --labels status/revising
 
-giteacli pr edit --owner agenteam --repo hermes-agent --index 11 --title "WIP: <originalTitle>"
+giteacli pr edit --repo <owner/repo> --index <prIndex> --title "WIP: <originalTitle>"
 ```
 
 ## 阶段三：本地修订开发
@@ -120,14 +120,14 @@ git merge upstream/main
 使用 `giteacli pr reviews` 获取评审的具体意见，根据评审意见逐条修改代码
 
 ```bash
-giteacli pr reviews --owner <owner> --repo <repo> --index <index>
+giteacli pr reviews --repo <owner/repo> --index <prIndex>
 ```
 
 有必要的话还可以使用评论相关命令查看历史评论记录
 
 ```bash
-giteacli pr comments --owner <owner> --repo <repo> --index <prIndex>
-giteacli issue comment list --owner <owner> --repo <repo> --index <issueIndex>
+giteacli pr comments --repo <owner/repo> --index <prIndex>
+giteacli issue comment list --repo <owner/repo> --index <issueIndex>
 ```
 
 ### 3.5 设置提交者信息
@@ -161,20 +161,18 @@ git push origin dev/issue_${index}
 >
 > **执行顺序不可调换：必须先给工单添加评论，再请求评审人重新审核，最后更新标签状态**
 
-
-> ⚠️ **【强制执行区】** 此阶段包含 **4 个严格按顺序执行的步骤**，不可中断、不可跳过、不可调换顺序！
-
-执行以下命令，记得将其中 `<owner>`/`<repo>` 等变量替换成实际的
-- 给工单添加评论、更新标签
-- 重新请求审查人审批，并修改 PR 的标题去掉 `WIP: ` 前缀
+执行以下命令，记得将其中 `<owner/repo>` 等变量替换成实际的
+- 给工单添加评论
+- 修改 PR 的标题去掉 `WIP: ` 前缀，并重新请求审查人审批
+- 更新工单标签
 
 ```bash
-giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "### Revisions\n\n@<creatorUsername> 已完成评审意见的修订，请重新评审。\n\n修订内容：\n- <修订点1>\n- <修订点2>\n\n..."
-giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/revising
-giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
+giteacli issue comment add --repo <owner/repo> --index <index> --body "### Revisions\n\n@<creatorUsername> 已完成评审意见的修订，请重新评审。\n\n修订内容：\n- <修订点1>\n- <修订点2>\n\n..."
+giteacli pr edit --repo <owner/repo> --index <prIndex> --title "<originalTitle>"
+giteacli pr reviewer review --repo <owner/repo> --index <prIndex> --username <username>
 
-giteacli pr edit --owner agenteam --repo hermes-agent --index 11 --title "<originalTitle>"
-giteacli pr reviewer review --owner <owner> --repo <repo> --index <index> --username <username>
+giteacli issue del-labels --repo <owner/repo> --index <index> --labels status/revising
+giteacli issue add-labels --repo <owner/repo> --index <index> --labels status/reviewing
 ```
 
 ## 注意事项

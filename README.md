@@ -1,6 +1,6 @@
 # Gitea Practice Skill
 
-基于 `gitea-mcp` 的 Gitea skill，通过标签系统管理工单状态，配合 Fork 和 Pull Request 机制完成工单开发。
+基于 `giteacli` 的 Gitea skill，通过标签系统管理工单状态，配合 Fork 和 Pull Request 机制完成工单开发。
 
 ## 核心概念
 
@@ -8,6 +8,7 @@
 
 | 标签 | 含义 |
 |------|------|
+| `status/draft` | 草稿，内容尚未完善 |
 | `status/pending` | 等待中，等待分配 |
 | `status/working` | 进行中 |
 | `status/reviewing` | 评审中 |

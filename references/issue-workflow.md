@@ -72,7 +72,7 @@ giteacli issue search --state open --labels status/pending --assigned true --lim
 giteacli repo list
 
 # Fork 仓库
-giteacli repo fork --owner <owner> --repo <repo>
+giteacli repo fork --repo <owner/repo>
 ```
 
 ### 1.4 克隆自己 Fork 的仓库
@@ -130,9 +130,9 @@ git config user.email <email>
 执行以下命令添加评论，并更新标签
 
 ```bash
-giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body "I am working."
-giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/pending
-giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/working
+giteacli issue comment add --repo <owner/repo> --index <index> --body "I am working."
+giteacli issue del-labels --repo <owner/repo> --index <index> --labels status/pending
+giteacli issue add-labels --repo <owner/repo> --index <index> --labels status/working
 ```
 
 ## 阶段三：工单处理
@@ -142,13 +142,13 @@ giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels
 使用 `giteacli issue get` 获取工单详情：
 
 ```bash
-giteacli issue get --owner <owner> --repo <repo> --index <index>
+giteacli issue get --repo <owner/repo> --index <index>
 ```
 
 使用 `giteacli issue comment list` 获取所有评论：
 
 ```bash
-giteacli issue comment list --owner <owner> --repo <repo> --index <index>
+giteacli issue comment list --repo <owner/repo> --index <index>
 ```
 
 ### 3.2 详细分析工单需求
@@ -216,13 +216,13 @@ git push origin dev/issue_${工单索引}
   ```
 
 ```bash
-giteacli pr add --owner <owner> --repo <repo> --title "<title>" --head <head_branch> --base main --body '### 总结\n\n- <变更点1>\n- <变更点2>\n\nFixed #<工单索引>'
+giteacli pr add --repo <owner/repo> --title "<title>" --head <head_branch> --base main --body '### 总结\n\n- <变更点1>\n- <变更点2>\n\nFixed #<工单索引>'
 ```
 
 当 PR 创建完成之后，若有说明，则为 PR 添加评审人
 
 ```bash
-giteacli pr reviewer add --owner <owner> --repo <repo> --index <pr_index> --username <username>
+giteacli pr reviewer add --repo <owner/repo> --index <prIndex> --username <username>
 ```
 
 ## 阶段四：提交 PR 并更新状态
@@ -232,8 +232,8 @@ giteacli pr reviewer add --owner <owner> --repo <repo> --index <pr_index> --user
 执行以下命令更新工单标签
 
 ```bash
-giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels status/working
-giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels status/reviewing
+giteacli issue del-labels --repo <owner/repo> --index <index> --labels status/working
+giteacli issue add-labels --repo <owner/repo> --index <index> --labels status/reviewing
 ```
 
 ## 注意事项

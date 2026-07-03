@@ -1,117 +1,210 @@
 # giteacli
 
-通过命令行工具与 Gitea 实例交互。
+A CLI tool for interacting with Gitea instances. Manage repositories, issues, pull requests, labels, and more with type-safe commands.
 
-## 安装
+## Installation
 
 ```bash
+# Using npm
 npm install -g @seepine/giteacli
-# 或
+
+# Using pnpm
 pnpm add -g @seepine/giteacli
 ```
 
-## 认证配置
+## Quick Start
 
 ```bash
-# 登录到 Gitea 实例
+# Login to your Gitea instance
 giteacli login --host <host> --token <token>
 
-# 查看当前登录用户
+# Check current user
 giteacli whoami
 ```
 
-## 输出格式
+## Commands
 
-默认输出 JSON，可设置为 toon 格式便于阅读：
+### Authentication
 
 ```bash
-giteacli config set --key format --value toon
+# Login to a Gitea instance
+giteacli login --host <host> --token <token>
+
+# Show current logged in user
+giteacli whoami
 ```
 
-## 可用命令
-
-### Repository
-
-| 命令 | 描述 |
-| ---- | ---- |
-| `giteacli repo list` | 列出当前用户的仓库 |
-| `giteacli repo add --name <name>` | 创建新仓库 |
-| `giteacli repo fork --owner <owner> --repo <repo>` | Fork 仓库 |
-
-### Repository Labels
-
-| 命令 | 描述 |
-| ---- | ---- |
-| `giteacli repo label list --owner <owner> --repo <repo>` | 列出仓库的所有标签 |
-| `giteacli repo label add --owner <owner> --repo <repo> --name <name> --color <color>` | 创建新标签 |
-| `giteacli repo label edit --owner <owner> --repo <repo> --id <id>` | 编辑标签 |
-| `giteacli repo label del --owner <owner> --repo <repo> --id <id>` | 删除标签 |
-
-### Issue
-
-| 命令 | 描述 |
-| ---- | ---- |
-| `giteacli issue get --owner <owner> --repo <repo> --index <index>` | 获取单个 Issue |
-| `giteacli issue list --owner <owner> --repo <repo>` | 列出仓库的 Issue |
-| `giteacli issue search [options]` | 搜索 Issue |
-| `giteacli issue add --owner <owner> --repo <repo> --title <title> --body <body>` | 创建新 Issue |
-| `giteacli issue edit --owner <owner> --repo <repo> --index <index>` | 编辑 Issue |
-| `giteacli issue add-labels --owner <owner> --repo <repo> --index <index> --labels <labels>` | 添加标签 |
-| `giteacli issue del-labels --owner <owner> --repo <repo> --index <index> --labels <labels>` | 移除标签 |
-
-#### Issue Search 选项
+### Repository Management
 
 ```bash
-giteacli issue search [options]
+# List your repositories
+giteacli repo list
 
-Options:
-  --state <enum>        Filter by state (open, closed, all)
-  --labels <string>     Filter by labels (comma-separated)
-  --assigned <boolean>  Issues assigned to me
-  --created <boolean>   Issues created by me
-  --page <number>       Page number
-  --limit <number>      Items per page, default 30
-  --q <string>          Search keyword
+# Create a new repository
+giteacli repo add --name <name>
+
+# Fork a repository
+giteacli repo fork --repo <owner/repo>
+```
+
+#### Repository Labels
+
+```bash
+# List labels in a repository
+giteacli repo label list --repo <owner/repo>
+
+# Create a new label
+giteacli repo label add --repo <owner/repo> --name <name> --color <color>
+
+# Edit a label
+giteacli repo label edit --repo <owner/repo> --id <id>
+
+# Delete a label
+giteacli repo label del --repo <owner/repo> --id <id>
+```
+
+### Issue Management
+
+```bash
+# Get a single issue
+giteacli issue get --repo <owner/repo> --index <index>
+
+# List issues in a repository
+giteacli issue list --repo <owner/repo>
+
+# Search issues
+giteacli issue search
+
+# Create a new issue
+giteacli issue add --repo <owner/repo> --title <title> --body <body>
+
+# Edit an issue
+giteacli issue edit --repo <owner/repo> --index <index>
+
+# Add labels to an issue
+giteacli issue add-labels --repo <owner/repo> --index <index> --labels <labels>
+
+# Remove labels from an issue
+giteacli issue del-labels --repo <owner/repo> --index <index> --labels <labels>
 ```
 
 #### Issue Comments
 
-| 命令 | 描述 |
-| ---- | ---- |
-| `giteacli issue comment list --owner <owner> --repo <repo> --index <index>` | 列出 Issue 的评论 |
-| `giteacli issue comment add --owner <owner> --repo <repo> --index <index> --body <body>` | 添加评论 |
-| `giteacli issue comment edit --owner <owner> --repo <repo> --commentId <commentId> --body <body>` | 编辑评论 |
-
-### Pull Request
-
-| 命令 | 描述 |
-| ---- | ---- |
-| `giteacli pr list --owner <owner> --repo <repo>` | 列出仓库的 Pull Request |
-| `giteacli pr search [options]` | 搜索 Pull Request |
-| `giteacli pr get --owner <owner> --repo <repo> --index <index>` | 获取单个 Pull Request |
-| `giteacli pr add --owner <owner> --repo <repo> --title <title> --head <head> --base <base>` | 创建新 Pull Request |
-| `giteacli pr edit --owner <owner> --repo <repo> --index <index>` | 编辑 Pull Request |
-| `giteacli pr comments --owner <owner> --repo <repo> --index <index>` | 获取 PR 评论 |
-| `giteacli pr reviews --owner <owner> --repo <repo> --index <index>` | 列出 PR 审核 |
-| `giteacli pr tbd` | 查找第一个需要修订的 PR (REQUEST_CHANGES review) |
-
-#### PR Search 选项
-
 ```bash
-giteacli pr search [options]
+# List comments on an issue
+giteacli issue comment list --repo <owner/repo> --index <index>
 
-Options:
-  --state <enum>        Filter by state
-  --assigned <boolean>  PRs assigned to me
-  --created <boolean>   PRs created by me
-  --page <number>       Page number
-  --limit <number>      Items per page, default 30
+# Add a comment to an issue
+giteacli issue comment add --repo <owner/repo> --index <index> --body <body>
+
+# Edit a comment
+giteacli issue comment edit --repo <owner/repo> --comment-id <commentId> --body <body>
 ```
 
-### Pull Request Reviewers
+### Pull Request Management
 
-| 命令 | 描述 |
-| ---- | ---- |
-| `giteacli pr reviewer add --owner <owner> --repo <repo> --index <index> --username <username>` | 添加评审者 |
-| `giteacli pr reviewer del --owner <owner> --repo <repo> --index <index> --username <username>` | 移除评审者 |
-| `giteacli pr reviewer review --owner <owner> --repo <repo> --index <index> --username <username>` | 请求重新评审 |
+```bash
+# List pull requests in a repository
+giteacli pr list --repo <owner/repo>
+
+# Search pull requests
+giteacli pr search
+
+# Get a single pull request
+giteacli pr get --repo <owner/repo> --index <index>
+
+# Create a new pull request
+giteacli pr add --repo <owner/repo> --title <title> --head <head> --base <base>
+
+# Edit a pull request
+giteacli pr edit --repo <owner/repo> --index <index>
+
+# Get pull request comments
+giteacli pr comments --repo <owner/repo> --index <index>
+
+# List pull request reviews
+giteacli pr reviews --repo <owner/repo> --index <index>
+
+# Find the first PR that needs changes (REQUEST_CHANGES review)
+giteacli pr tbd
+```
+
+#### Reviewers
+
+```bash
+# Add a reviewer to a pull request
+giteacli pr reviewer add --repo <owner/repo> --index <index> --username <username>
+
+# Remove a reviewer from a pull request
+giteacli pr reviewer del --repo <owner/repo> --index <index> --username <username>
+
+# Request re-review
+giteacli pr reviewer review --repo <owner/repo> --index <index> --username <username>
+```
+
+### Actions
+
+```bash
+# List action runs in a repository
+giteacli action list --repo <owner/repo>
+
+# Filter action runs
+giteacli action list --repo <owner/repo> --status success --branch main --event push
+
+# List jobs in an action run
+giteacli action job list --repo <owner/repo> --index <runId>
+
+# View an action job
+giteacli action job view --repo <owner/repo> --index <jobId>
+```
+
+### Configuration
+
+```bash
+# Set configuration values
+giteacli config set <key> <value>
+
+# Get a configuration value
+giteacli config get <key>
+
+# List configuration values
+giteacli config list
+
+# Unset a configuration value
+giteacli config unset <key>
+
+# Available keys: format
+# format: json or toon
+```
+
+## Output Format
+
+By default, output is JSON. You can set `format=toon` in config for pretty-printed output:
+
+```bash
+giteacli config set format toon
+```
+
+To switch back to JSON:
+
+```bash
+giteacli config set format json
+```
+
+## Pagination and Filters
+
+List commands support pagination with `--page` and `--limit` where available:
+
+```bash
+giteacli issue list --repo <owner/repo> --page 1 --limit 30
+giteacli pr list --repo <owner/repo> --state open --page 1 --limit 30
+giteacli action list --repo <owner/repo> --page 1 --limit 20
+```
+
+Boolean filters currently require an explicit value:
+
+```bash
+giteacli issue search --assigned true
+giteacli pr search --created false
+giteacli repo list --forked true
+```
